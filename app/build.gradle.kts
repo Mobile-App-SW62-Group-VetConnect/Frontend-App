@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // StarBorder
+    implementation("androidx.compose.material:material-icons-core:1.0.1")
+    implementation("androidx.compose.material:material-icons-extended:1.0.1")
     // Navigation
     implementation(libs.androidx.navigation.compose)
 

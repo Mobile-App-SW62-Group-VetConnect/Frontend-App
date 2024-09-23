@@ -35,7 +35,10 @@ fun LoginScreen(navController: NavController) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ) {
+
+        )
+
+        {
             Image(
                 painter = painterResource(id = R.drawable.vet_connect_logo),
                 contentDescription = "Vet Connect Logo",
@@ -106,5 +109,6 @@ fun LoginScreen(navController: NavController) {
                 Text("Crear una cuenta", color = SecondaryGreen2)
             }
             }
+
         }
     }
