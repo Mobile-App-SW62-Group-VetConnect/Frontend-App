@@ -19,10 +19,7 @@ import com.luciano.vetconnect.R
 import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
 import com.luciano.vetconnect.features.auth.splash.SplashScreen
-
-import com.luciano.vetconnect.features.savedvet.MyApp
 import com.luciano.vetconnect.features.savedvet.SavedVetScreen
-
 import com.luciano.vetconnect.features.vet_detail.VetDetailScreen
 import com.luciano.vetconnect.shared.ui.components.MenuOverlay
 import com.luciano.vetconnect.shared.ui.theme.SecondaryOrange
@@ -35,6 +32,7 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Home: Screen("home")
     object VetDetail : Screen("vet_detail")
+    object SavedVetScreen : Screen("favorites")
 
 }
 
@@ -103,6 +101,11 @@ fun NavGraph(
         }
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
+        }
+        composable(Screen.SavedVetScreen.route) {
+            SavedVetScreen(
+                navController = navController,
+                onMenuClick = onMenuClick)
         }
 
         composable(Screen.Home.route) {
