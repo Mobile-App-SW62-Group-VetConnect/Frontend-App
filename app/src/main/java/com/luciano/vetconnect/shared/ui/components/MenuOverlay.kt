@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luciano.vetconnect.R
+import com.luciano.vetconnect.navigation.Screen
 import com.luciano.vetconnect.shared.ui.theme.*
 
 @Composable
@@ -77,6 +78,7 @@ fun MenuOverlay(
                     MenuOption(icon = R.drawable.ic_saves, text = "Guardados") { onNavigate("saved") }
                     MenuOption(icon = R.drawable.ic_notifications, text = "Notificaciones") { onNavigate("notifications") }
                     MenuOption(icon = R.drawable.ic_settings, text = "Ajustes") { onNavigate("settings") }
+                    MenuOption(icon = R.drawable.ic_search, text = "Buscar") { onNavigate(Screen.Search.route) }
 
                     Spacer(modifier = Modifier.weight(1f))
 
