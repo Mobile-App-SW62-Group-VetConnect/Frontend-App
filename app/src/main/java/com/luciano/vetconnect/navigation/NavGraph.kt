@@ -19,6 +19,7 @@ import com.luciano.vetconnect.R
 import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
 import com.luciano.vetconnect.features.auth.splash.SplashScreen
+import com.luciano.vetconnect.features.savedvet.SavedVetScreen
 import com.luciano.vetconnect.features.vet_detail.VetDetailScreen
 import com.luciano.vetconnect.shared.ui.components.MenuOverlay
 import com.luciano.vetconnect.shared.ui.theme.SecondaryOrange
@@ -28,16 +29,18 @@ import com.luciano.vetconnect.features.search.SearchResults
 import com.luciano.vetconnect.features.home.HomeScreen
 
 
-
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object Login : Screen("login")
     object Register : Screen("register")
     object Home: Screen("home")
     object VetDetail : Screen("vet_detail")
+
     object Search : Screen("search")
     object SearchResults : Screen("searchResultScreen")
 
+
+    object SavedVetScreen : Screen("favorites")
 
 }
 
@@ -100,11 +103,23 @@ fun NavGraph(
         composable(Screen.Splash.route) {
             SplashScreen(navController = navController)
         }
+
         composable(Screen.Login.route) {
             LoginScreen(navController = navController)
         }
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
+        }
+        composable(Screen.SavedVetScreen.route) {
+            SavedVetScreen(
+                navController = navController,
+                onMenuClick = onMenuClick)
+        }
+
+        composable(Screen.Home.route) {
+            HomeScreen(
+                navController = navController,
+                onMenuClick = onMenuClick)
         }
         composable(Screen.VetDetail.route) {
             VetDetailScreen(
@@ -113,6 +128,7 @@ fun NavGraph(
             )
 
         }
+
         composable(Screen.Search.route) {
             SearchScreen(navController = navController)
         }
@@ -121,5 +137,9 @@ fun NavGraph(
             SearchResults(navController = navController)
         }
 
+
+
     }
 }
+
+

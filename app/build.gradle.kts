@@ -59,12 +59,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // StarBorder
+    implementation("androidx.compose.material:material-icons-core:1.7.2")
+    implementation("androidx.compose.material:material-icons-extended:1.7.2")
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
     // Retrofit for API calls
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Coil for image loading
     implementation(libs.coil.compose)
@@ -79,4 +82,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }
