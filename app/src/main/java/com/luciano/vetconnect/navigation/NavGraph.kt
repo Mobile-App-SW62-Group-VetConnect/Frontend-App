@@ -14,28 +14,63 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraph
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.luciano.vetconnect.R
+import com.luciano.vetconnect.features.auth.login.LoginScreen
+import com.luciano.vetconnect.features.auth.register.RegisterScreen
+import com.luciano.vetconnect.features.auth.splash.SplashScreen
+
+sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
+    object Login : Screen("login")
+    object Register : Screen("register")
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavGraph(){
-    CenterAlignedTopAppBar(title = {
-        Image(
-            painter = painterResource(id = R.drawable.logo), // Reemplaza con el nombre de tu ícono
-            contentDescription = "Icono de la app",
-            modifier = Modifier.size(180.dp)
-        ) },
+fun TopAppBar() {
+    CenterAlignedTopAppBar(
+        title = {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Icono de la app",
+                modifier = Modifier.size(180.dp)
+            )
+        },
         navigationIcon = {
             IconButton(onClick = { /* do something */ }) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Localized description",
-                    tint= Color(0xFFFFBB57),
+                    tint = Color(0xFFFFBB57),
                     modifier = Modifier.size(50.dp)
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF1E4E3C)),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF1E4E3C))
     )
+}
+
+@Composable
+fun NavGraph(
+    navController: NavHostController = rememberNavController(),
+    startDestination: String = Screen.Splash.route
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination
+    ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(navController = navController)
+        }
+        composable(Screen.Login.route) {
+            LoginScreen(navController = navController)
+        }
+        composable(Screen.Register.route) {
+            RegisterScreen(navController = navController)
+        }
+    }
 }
