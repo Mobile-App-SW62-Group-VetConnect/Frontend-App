@@ -22,14 +22,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.shared.ui.theme.*
 import com.luciano.vetconnect.navigation.TopAppBar
 
 @Composable
-fun VetDetailScreen() {
+fun VetDetailScreen(navController: NavController, onMenuClick: () -> Unit) {
     Scaffold(
-        topBar = { TopAppBar() }
+        topBar = { TopAppBar(onMenuClick = onMenuClick) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
