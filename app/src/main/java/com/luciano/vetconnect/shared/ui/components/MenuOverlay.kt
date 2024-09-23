@@ -74,7 +74,7 @@ fun MenuOverlay(
                     // Opciones de menú
                     MenuOption(icon = R.drawable.ic_home, text = "Inicio") { onNavigate("home") }
                     MenuOption(icon = R.drawable.ic_search, text = "Buscar") { onNavigate("search") }
-                    MenuOption(icon = R.drawable.ic_saves, text = "Guardados") { onNavigate("saved") }
+                    MenuOption(icon = R.drawable.ic_saves, text = "Guardados") { onNavigate("favorites") }
                     MenuOption(icon = R.drawable.ic_notifications, text = "Notificaciones") { onNavigate("notifications") }
                     MenuOption(icon = R.drawable.ic_settings, text = "Ajustes") { onNavigate("settings") }
 

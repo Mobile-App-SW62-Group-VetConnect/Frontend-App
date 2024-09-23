@@ -6,165 +6,184 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.shared.data.models.Veterinary
-import com.luciano.vetconnect.shared.ui.theme.VetConnectTheme
+import com.luciano.vetconnect.shared.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.net.URL
 
-class SavedVetScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            VetConnectTheme() {
-                MyApp()
-            }
-        }
-    }
-}
-
 @Composable
-fun MyApp() {
-    Scaffold(
-        topBar = {
-            TopBar()
-        },
-        content = { padding ->
-            BodyContent(modifier = Modifier.padding(padding))
-        }
-    )
-}
+fun SavedVetScreen(navController: NavController, onMenuClick: () -> Unit) {
+    val context = LocalContext.current
+    var veterinarias by remember { mutableStateOf<List<Veterinary>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<String?>(null) }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar() {
-    TopAppBar(
-        title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Menu",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.CenterStart)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(200.dp)
-                )
-            }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF1E4E3C))
-    )
-}
-
-@Composable
-fun BodyContent(modifier: Modifier = Modifier) {
-    var veterinarias by remember { mutableStateOf(listOf<Veterinary>()) }
     LaunchedEffect(Unit) {
-        veterinarias = fetchVeterinarias()
+        try {
+            if (isNetworkAvailable(context)) {
+                veterinarias = fetchVeterinarias()
+            } else {
+                error = "No hay conexión a internet"
+            }
+        } catch (e: Exception) {
+            error = "Error al cargar las veterinarias: ${e.message}"
+        } finally {
+            isLoading = false
+        }
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .background(Color(0xFFFFF3E0))
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+    Scaffold(
+        topBar = { com.luciano.vetconnect.navigation.TopAppBar(onMenuClick = onMenuClick) },
+        content = { padding ->
             Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .border(2.dp, Color(0xFF1ECD98), RoundedCornerShape(8.dp))
-                    .background(Color.Transparent)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .padding(padding)
+                    .background(SecondaryOrange2)
             ) {
-                Text("Filtros", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1ECD98))
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .border(2.dp, Color(0xFF8E8E8E), RoundedCornerShape(8.dp))
-                    .background(Color.Transparent, shape = RoundedCornerShape(8.dp))
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Ordenar por", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF8E8E8E))
+                when {
+                    isLoading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = PrimaryGreen
+                        )
+                    }
+                    error != null -> {
+                        Text(
+                            text = error!!,
+                            color = Color.Red,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(16.dp)
+                        )
+                    }
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            item {
+                                FilterAndSortButtons()
+                            }
+                            item {
+                                Text(
+                                    text = "Veterinarias guardadas",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp)
+                                )
+                            }
+                            items(veterinarias) { veterinary ->
+                                VeterinaryCard(veterinary)
+                            }
+                        }
+                    }
+                }
             }
         }
-        Text(
-            text = "Veterinarias guardadas",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+    )
+}
+
+@Composable
+fun FilterAndSortButtons() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        OutlinedButton(
+            onClick = { /* TODO: Implement filter logic */ },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
-        Column {
-            veterinarias.forEach { veterinary ->
-                VeterinaryCard(
-                    name = veterinary.name,
-                    address = veterinary.address,
-                    rating = veterinary.rating,
-                    clinicPrice = veterinary.clinicPrice,
-                    bathPrice = veterinary.bathPrice
+                .weight(1f)
+                .border(2.dp, PrimaryGreen, RoundedCornerShape(8.dp))
+                .background(Color.Transparent, RoundedCornerShape(8.dp))
+        ) {
+            Text("Filtros", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = PrimaryGreen)
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        OutlinedButton(
+            onClick = { /* TODO: Implement sort logic */ },
+            modifier = Modifier
+                .weight(1f)
+                .border(2.dp, TextOptionGray, RoundedCornerShape(8.dp))
+                .background(Color.Transparent, RoundedCornerShape(8.dp))
+        ) {
+            Text("Ordenar por", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextOptionGray)
+        }
+    }
+}
+
+@Composable
+fun VeterinaryCard(veterinary: Veterinary) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = veterinary.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(5) { index ->
+                    Icon(
+                        painter = painterResource(
+                            id = if (index < veterinary.rating) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+                        ),
+                        contentDescription = null,
+                        tint = if (index < veterinary.rating) SecondaryOrange else Color.Gray,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Image(
+                    painter = painterResource(id = R.drawable.veterinaria),
+                    contentDescription = "Imagen de la veterinaria",
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
                 )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(text = "Dirección: ${veterinary.address}", fontSize = 14.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Consulta clínica: ${veterinary.clinicPrice}", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = "Baño de la mascota: ${veterinary.bathPrice}", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
@@ -175,8 +194,7 @@ suspend fun fetchVeterinarias(): List<Veterinary> {
         val url = "https://mocki.io/v1/8b031a14-0dbe-473c-98a4-bf3113e712f8"
         val response = URL(url).readText()
 
-        val jsonObject = org.json.JSONObject(response)
-
+        val jsonObject = JSONObject(response)
         val jsonArray = jsonObject.getJSONArray("veterinaryCards")
 
         val veterinarias = mutableListOf<Veterinary>()
@@ -195,72 +213,13 @@ suspend fun fetchVeterinarias(): List<Veterinary> {
     }
 }
 
-@Composable
-fun VeterinaryCard(name: String, address: String, rating: Int, clinicPrice: String, bathPrice: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(5) { index ->
-                    if (index < rating) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = Color.Black,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Outlined.StarBorder,
-                            contentDescription = null,
-                            tint = Color.Black,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Image(
-                    painter = painterResource(id = R.drawable.veterinaria),
-                    contentDescription = "Imagen de la veterinaria",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(text = "Dirección: $address", fontSize = 14.sp)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Consulta clínica: $clinicPrice", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Baño de la mascota: $bathPrice", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyAppPreview() {
-    VetConnectTheme() {
-        MyApp()
+fun isNetworkAvailable(context: android.content.Context): Boolean {
+    val connectivityManager = context.getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return when {
+        activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        else -> false
     }
 }
