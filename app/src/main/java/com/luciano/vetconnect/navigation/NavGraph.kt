@@ -22,11 +22,14 @@ import com.luciano.vetconnect.R
 import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
 import com.luciano.vetconnect.features.auth.splash.SplashScreen
+import com.luciano.vetconnect.features.home.HomeScreen
+import com.luciano.vetconnect.features.home.HomeScreen
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object Login : Screen("login")
     object Register : Screen("register")
+    object Home: Screen("home")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +74,9 @@ fun NavGraph(
         }
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
+        }
+        composable(Screen.Home.route){
+            HomeScreen(navController= navController)
         }
     }
 }
