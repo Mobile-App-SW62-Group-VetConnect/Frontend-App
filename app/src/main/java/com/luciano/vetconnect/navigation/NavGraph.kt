@@ -23,6 +23,8 @@ import com.luciano.vetconnect.features.vet_detail.VetDetailScreen
 import com.luciano.vetconnect.shared.ui.components.MenuOverlay
 import com.luciano.vetconnect.shared.ui.theme.SecondaryOrange
 import com.luciano.vetconnect.features.search.SearchScreen
+import com.luciano.vetconnect.features.search.SearchResults
+
 import com.luciano.vetconnect.features.home.HomeScreen
 
 
@@ -34,6 +36,7 @@ sealed class Screen(val route: String) {
     object Home: Screen("home")
     object VetDetail : Screen("vet_detail")
     object Search : Screen("search")
+    object SearchResults : Screen("searchResultScreen")
 
 
 }
@@ -112,6 +115,10 @@ fun NavGraph(
         }
         composable(Screen.Search.route) {
             SearchScreen(navController = navController)
+        }
+
+        composable(Screen.SearchResults.route) {
+            SearchResults(navController = navController)
         }
 
     }

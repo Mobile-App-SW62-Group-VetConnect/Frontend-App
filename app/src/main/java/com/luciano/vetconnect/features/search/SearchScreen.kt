@@ -33,7 +33,10 @@ fun SearchScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            SearchBarItem { newText -> searchText = newText }
+            SearchBarItem {
+                newText -> searchText = newText
+                navController.navigate("searchResultScreen")
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
