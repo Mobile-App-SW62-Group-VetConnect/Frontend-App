@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -49,13 +50,15 @@ fun LoginScreen(navController: NavController) {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electrónico") },
+                label = { Text("Correo electrónico", color = Black) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = PrimaryGreen,
                     unfocusedBorderColor = TextOptionGray
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                textStyle = TextStyle(color = TextOptionGray)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -63,7 +66,7 @@ fun LoginScreen(navController: NavController) {
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña") },
+                label = { Text("Contraseña",color = Black) },
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -71,6 +74,7 @@ fun LoginScreen(navController: NavController) {
                     focusedBorderColor = PrimaryGreen,
                     unfocusedBorderColor = TextOptionGray
                 ),
+                textStyle = TextStyle(color = TextOptionGray),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
@@ -86,7 +90,8 @@ fun LoginScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* TODO: Implement login logic */ },
+                onClick = { navController.navigate(Screen.Home.route) },
+
                 colors = ButtonDefaults.buttonColors(containerColor = SecondaryGreen2),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
