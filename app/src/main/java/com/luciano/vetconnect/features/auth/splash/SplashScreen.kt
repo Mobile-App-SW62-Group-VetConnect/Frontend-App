@@ -1,4 +1,4 @@
-package com.luciano.vetconnect.features.splash
+package com.luciano.vetconnect.features.auth.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
