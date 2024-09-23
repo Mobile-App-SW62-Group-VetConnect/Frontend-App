@@ -1,91 +1,172 @@
 package com.luciano.vetconnect.features.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.navigation.Screen
 import com.luciano.vetconnect.navigation.TopAppBar
+import com.luciano.vetconnect.shared.ui.theme.*
+
+data class VetClinic(
+    val name: String,
+    val rating: Float,
+    val reviews: Int,
+    val address: String,
+    val consultPrice: String,
+    val bathPrice: String,
+    val imageRes: Int
+)
 
 @Composable
 fun HomeScreen(navController: NavController, onMenuClick: () -> Unit) {
+    val vetClinics = List(4) {
+        VetClinic(
+            name = "Clinica Veterinaria - El Roble",
+            rating = 4f,
+            reviews = 233,
+            address = "Jr Callao Nro 894, Callao",
+            consultPrice = "S/. 60",
+            bathPrice = "S/. 30",
+            imageRes = R.drawable.vet_clinic
+        )
+    }
+
     Scaffold(
         topBar = { TopAppBar(onMenuClick = onMenuClick) },
-        modifier = Modifier.fillMaxSize(),
-        containerColor = Color(0xFFFFF3E0),
-        content = { paddingValues ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(text = "Clinicas veterinarias cerca de ti", fontSize = 20.sp, color = Color(0xFF000000))
-                Spacer(modifier = Modifier.height(4.dp))
-                VetCenterCard(navController)
-                VetCenterCard(navController)
-                VetCenterCard(navController)
-                VetCenterCard(navController)
-                Spacer(modifier = Modifier.height(4.dp))
+        containerColor = SecondaryOrange2
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
+        ) {
+            item {
+                Text(
+                    text = "Clínicas veterinarias cerca de ti",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+            }
+            items(vetClinics) { clinic ->
+                VetClinicCard(
+                    clinic = clinic,
+                    onClinicClick = {
+                        navController.navigate(Screen.VetDetail.route)
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
-    )
-}
-
-@Composable
-fun VetCenterCard(navController: NavController){
-    Card(onClick = {navController.navigate(Screen.VetDetail.route)},
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFFFFF),
-            contentColor = Color(0xFF000000),
-        ),
-        modifier = Modifier.fillMaxWidth().height(300.dp),
-        elevation =  CardDefaults.cardElevation(defaultElevation = 2.dp)
-
-
-    ) {
-        VetCenterCardContent()
     }
 }
-@Preview()
-@Composable
-fun VetCenterCardContent(){
-    Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(text = "Clínica Veterinaria - El Roble", fontSize = 24.sp, lineHeight = 30.sp,
-            maxLines = 2, overflow = TextOverflow.Ellipsis)
-        Row {
-            Image(
-                painter = painterResource(id = R.drawable.vetcenter),
-                contentDescription = "Centro Veterinario",
-                modifier = Modifier.size(200.dp, 200.dp).padding(end = 10.dp),
-            )
-            Text(text = "Dirección: Jr Callao Nro 894, Callao")
-        }
 
+@Composable
+fun VetClinicCard(clinic: VetClinic, onClinicClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClinicClick),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = clinic.name,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextDarkGreen
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                repeat(5) { index ->
+                    Icon(
+                        painter = painterResource(
+                            id = if (index < clinic.rating.toInt()) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+                        ),
+                        contentDescription = null,
+                        tint = SecondaryOrange,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+                Text(
+                    text = "${clinic.reviews} Reviews",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            Image(
+                painter = painterResource(id = clinic.imageRes),
+                contentDescription = "Clinic Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = "Dirección: ${clinic.address}",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Consulta clínica",
+                    fontSize = 14.sp,
+                    color = TextDarkGreen
+                )
+                Text(
+                    text = "Price ${clinic.consultPrice}",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Baño",
+                    fontSize = 14.sp,
+                    color = TextDarkGreen
+                )
+                Text(
+                    text = "Price ${clinic.bathPrice}",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen
+                )
+            }
+        }
     }
 }

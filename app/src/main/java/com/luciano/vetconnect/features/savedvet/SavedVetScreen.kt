@@ -1,11 +1,9 @@
 package com.luciano.vetconnect.features.savedvet
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +25,8 @@ import androidx.navigation.NavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.shared.data.models.Veterinary
 import com.luciano.vetconnect.shared.ui.theme.*
+import com.luciano.vetconnect.navigation.TopAppBar
+import com.luciano.vetconnect.navigation.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -35,14 +35,14 @@ import java.net.URL
 @Composable
 fun SavedVetScreen(navController: NavController, onMenuClick: () -> Unit) {
     val context = LocalContext.current
-    var veterinarias by remember { mutableStateOf<List<Veterinary>>(emptyList()) }
+    var veterinaries by remember { mutableStateOf<List<Veterinary>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         try {
             if (isNetworkAvailable(context)) {
-                veterinarias = fetchVeterinarias()
+                veterinaries = fetchVeterinarias()
             } else {
                 error = "No hay conexión a internet"
             }
@@ -54,58 +54,65 @@ fun SavedVetScreen(navController: NavController, onMenuClick: () -> Unit) {
     }
 
     Scaffold(
-        topBar = { com.luciano.vetconnect.navigation.TopAppBar(onMenuClick = onMenuClick) },
-        content = { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .background(SecondaryOrange2)
-            ) {
-                when {
-                    isLoading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = PrimaryGreen
-                        )
-                    }
-                    error != null -> {
-                        Text(
-                            text = error!!,
-                            color = Color.Red,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(16.dp)
-                        )
-                    }
-                    else -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                        ) {
-                            item {
-                                FilterAndSortButtons()
-                            }
-                            item {
-                                Text(
-                                    text = "Veterinarias guardadas",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 8.dp)
-                                )
-                            }
-                            items(veterinarias) { veterinary ->
-                                VeterinaryCard(veterinary)
-                            }
+        topBar = { TopAppBar(onMenuClick = onMenuClick) },
+        containerColor = SecondaryOrange2
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(SecondaryOrange2)
+        ) {
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = PrimaryGreen
+                    )
+                }
+                error != null -> {
+                    Text(
+                        text = error!!,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(16.dp)
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        item {
+                            FilterAndSortButtons()
+                        }
+                        item {
+                            Text(
+                                text = "Veterinarias guardadas",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = TextDarkGreen,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp)
+                            )
+                        }
+                        items(veterinaries) { veterinary ->
+                            VeterinaryCard(
+                                veterinary = veterinary,
+                                onVeterinaryClick = {
+                                    navController.navigate(Screen.VetDetail.route)
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
@@ -139,11 +146,11 @@ fun FilterAndSortButtons() {
 }
 
 @Composable
-fun VeterinaryCard(veterinary: Veterinary) {
+fun VeterinaryCard(veterinary: Veterinary, onVeterinaryClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .clickable(onClick = onVeterinaryClick),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -161,7 +168,7 @@ fun VeterinaryCard(veterinary: Veterinary) {
                             id = if (index < veterinary.rating) R.drawable.ic_star_filled else R.drawable.ic_star_outline
                         ),
                         contentDescription = null,
-                        tint = if (index < veterinary.rating) SecondaryOrange else Color.Gray,
+                        tint = SecondaryOrange,
                         modifier = Modifier.size(24.dp)
                     )
                 }
