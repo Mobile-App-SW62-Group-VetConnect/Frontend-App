@@ -41,6 +41,9 @@ fun VetDetailScreen() {
                 VetImage()
                 VetInfo()
                 ActionButtons()
+                ServicesSection()
+                AddressSection()
+                ReviewsSection()
 
             }
         }
@@ -148,5 +151,136 @@ fun ActionButton(icon: Any, text: String) {
             }
         }
         Text(text = text, fontSize = 12.sp, color = PrimaryGreen)
+    }
+}
+@Composable
+fun ServicesSection() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Servicios",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = PrimaryGreen
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            ServiceItem("Consulta clínica", "Price S/. 60")
+            ServiceItem("Baño", "Price S/. 30")
+        }
+    }
+}
+
+@Composable
+fun ServiceItem(name: String, price: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = name, color = Color.Black)
+        Text(text = price, color = Color.Gray)
+    }
+}
+
+@Composable
+fun AddressSection() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Dirección",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = PrimaryGreen
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Jr Callao Nro 894, Callao", color = Color.Black)
+        }
+    }
+}
+
+@Composable
+fun ReviewsSection() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Reseñas",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = PrimaryGreen
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            ReviewItem()
+            ReviewItem()
+            OutlinedTextField(
+                value = "",
+                onValueChange = { /* TODO: Implement review input */ },
+                placeholder = { Text("Escribe una reseña...") },
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    IconButton(onClick = { /* TODO: Submit review */ }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowForward,
+                            contentDescription = "Submit Review",
+                            tint = PrimaryGreen
+                        )
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun ReviewItem() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.user_avatar),
+            contentDescription = "User Avatar",
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Text(text = "Nombre de usuario", fontWeight = FontWeight.Bold)
+            Text(text = "Hace x días", color = Color.Gray, fontSize = 12.sp)
+            Row {
+                repeat(4) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_star_filled),
+                        contentDescription = "Star",
+                        tint = SecondaryOrange,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_star_outline),
+                    contentDescription = "Star",
+                    tint = SecondaryOrange,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+            Text(text = "Texto de la reseña", fontSize = 14.sp)
+        }
     }
 }
