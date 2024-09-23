@@ -22,12 +22,17 @@ import com.luciano.vetconnect.features.auth.splash.SplashScreen
 import com.luciano.vetconnect.features.vet_detail.VetDetailScreen
 import com.luciano.vetconnect.shared.ui.components.MenuOverlay
 import com.luciano.vetconnect.shared.ui.theme.SecondaryOrange
+import com.luciano.vetconnect.features.home.HomeScreen
+
+
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object Login : Screen("login")
     object Register : Screen("register")
+    object Home: Screen("home")
     object VetDetail : Screen("vet_detail")
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,6 +105,7 @@ fun NavGraph(
                 navController = navController,
                 onMenuClick = onMenuClick
             )
+
         }
     }
 }
