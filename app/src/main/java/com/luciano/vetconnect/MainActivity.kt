@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.luciano.vetconnect.home.Home
 import com.luciano.vetconnect.navigation.NavGraph
 import com.luciano.vetconnect.shared.ui.theme.VetConnectTheme
 
@@ -39,8 +40,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = { NavGraph() }
                     ) { innerPadding ->
-                        Surface(modifier = Modifier.padding(innerPadding)) {
-
+                        Surface(modifier = Modifier.padding(innerPadding).fillMaxSize(), color = Color(0xFFFFF3E0))
+                        {
                         }
                 }
             }
