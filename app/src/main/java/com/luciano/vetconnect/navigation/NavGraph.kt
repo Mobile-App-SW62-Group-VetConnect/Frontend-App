@@ -21,7 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
-import com.luciano.vetconnect.features.splash.SplashScreen
+import com.luciano.vetconnect.features.auth.splash.SplashScreen
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
