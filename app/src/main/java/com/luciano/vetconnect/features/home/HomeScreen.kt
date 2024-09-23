@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,32 +28,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.luciano.vetconnect.R
+import com.luciano.vetconnect.navigation.Screen
+import com.luciano.vetconnect.navigation.TopAppBar
 
 @Composable
-fun HomeScreen(navController: NavController){
-    Surface(
+fun HomeScreen(navController: NavController, onMenuClick: () -> Unit) {
+    Scaffold(
+        topBar = { TopAppBar(onMenuClick = onMenuClick) },
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFFFF3E0)
-    )  {
-        Column (verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(start = 20.dp, end = 20.dp).verticalScroll(
-            rememberScrollState())){
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "Clinicas veterinarias cerca de ti", fontSize = 20.sp, color = Color(0xFF000000))
-            Spacer(modifier = Modifier.height(4.dp))
-            VetCenterCard()
-            VetCenterCard()
-            VetCenterCard()
-            VetCenterCard()
-            Spacer(modifier = Modifier.height(4.dp))
+        containerColor = Color(0xFFFFF3E0),
+        content = { paddingValues ->
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(text = "Clinicas veterinarias cerca de ti", fontSize = 20.sp, color = Color(0xFF000000))
+                Spacer(modifier = Modifier.height(4.dp))
+                VetCenterCard(navController)
+                VetCenterCard(navController)
+                VetCenterCard(navController)
+                VetCenterCard(navController)
+                Spacer(modifier = Modifier.height(4.dp))
+            }
         }
-    }
-
+    )
 }
 
-@Preview()
 @Composable
-fun VetCenterCard(){
-    Card(onClick = {},
+fun VetCenterCard(navController: NavController){
+    Card(onClick = {navController.navigate(Screen.VetDetail.route)},
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFFFFFFF),
             contentColor = Color(0xFF000000),

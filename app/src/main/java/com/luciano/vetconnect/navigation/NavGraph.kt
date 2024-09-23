@@ -100,6 +100,11 @@ fun NavGraph(
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
         }
+        composable(Screen.Home.route) {
+            HomeScreen(
+                navController = navController,
+                onMenuClick = onMenuClick)
+        }
         composable(Screen.VetDetail.route) {
             VetDetailScreen(
                 navController = navController,
