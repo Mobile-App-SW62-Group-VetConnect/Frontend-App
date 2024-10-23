@@ -78,7 +78,6 @@ fun MenuOverlay(
                     MenuOption(icon = R.drawable.ic_saves, text = "Guardados") { onNavigate("favorites") }
                     MenuOption(icon = R.drawable.ic_notifications, text = "Notificaciones") { onNavigate("notifications") }
                     MenuOption(icon = R.drawable.ic_settings, text = "Ajustes") { onNavigate("settings") }
-                    MenuOption(icon = R.drawable.ic_search, text = "Buscar") { onNavigate(Screen.Search.route) }
 
                     Spacer(modifier = Modifier.weight(1f))
 

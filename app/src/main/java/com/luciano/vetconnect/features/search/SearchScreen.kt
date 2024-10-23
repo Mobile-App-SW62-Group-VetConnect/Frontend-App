@@ -1,20 +1,17 @@
 package com.luciano.vetconnect.features.search
 
-import com.luciano.vetconnect.shared.ui.components.SearchBarItem
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.luciano.vetconnect.shared.ui.theme.PrimaryGreen
-import com.luciano.vetconnect.shared.ui.theme.SecondaryOrange2
-
+import com.luciano.vetconnect.navigation.Screen
+import com.luciano.vetconnect.shared.ui.components.SearchBarItem
+import com.luciano.vetconnect.shared.ui.theme.*
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun SearchScreen(navController: NavController) {
@@ -34,97 +31,89 @@ fun SearchScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             SearchBarItem {
-                newText -> searchText = newText
-                navController.navigate("searchResultScreen")
+                    newText -> searchText = newText
+                navController.navigate(Screen.SearchResults.route)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Búsquedas Recientes",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen
+                ),
+                modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            ChipsRow(
+                items = listOf("El Roble", "Baño y Corte de pelo"),
+                onChipClick = { navController.navigate(Screen.SearchResults.route) }
+            )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchChip(text = "El Roble")
-                SearchChip(text = "Baño y Corte de pelo")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = "Servicios más buscados",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen
+                ),
+                modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            ChipsRow(
+                items = listOf("Corte de uñas", "Baño y Corte de pelo"),
+                onChipClick = { navController.navigate(Screen.SearchResults.route) }
+            )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchChip(text = "Corte de uñas")
-                SearchChip(text = "Baño y Corte de pelo")
-            }
+            ChipsRow(
+                items = listOf("Spa para gatos", "Spa para perros"),
+                onChipClick = { navController.navigate(Screen.SearchResults.route) }
+            )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchChip(text = "Spa para gatos")
-                SearchChip(text = "Spa para perros")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Otros también buscaron
             Text(
                 text = "Otros también buscaron",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = TextDarkGreen
+                ),
+                modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            ChipsRow(
+                items = listOf("Ricocan", "Medicamentos para perros"),
+                onChipClick = { navController.navigate(Screen.SearchResults.route) }
+            )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchChip(text = "Ricocan")
-                SearchChip(text = "Medicamentos para perros")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchChip(text = "Guardería")
-            }
+            ChipsRow(
+                items = listOf("Guardería"),
+                onChipClick = { navController.navigate(Screen.SearchResults.route) }
+            )
         }
     }
 }
 
 @Composable
-fun SearchChip(text: String) {
-    Button(
-        onClick = { },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = PrimaryGreen,
-        ),
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .wrapContentWidth()
-            .defaultMinSize(minHeight = 32.dp)
-            .padding(4.dp)
+fun ChipsRow(
+    items: List<String>,
+    onChipClick: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(vertical = 4.dp)
     ) {
-        Text(text = text, style = MaterialTheme.typography.bodyMedium)
+        items.forEach { text ->
+            SuggestionChip(
+                onClick = onChipClick,
+                label = { Text(text = text) },
+                colors = SuggestionChipDefaults.suggestionChipColors(
+                    containerColor = PrimaryGreen,
+                    labelColor = PrimaryWhite
+                )
+            )
+        }
     }
 }

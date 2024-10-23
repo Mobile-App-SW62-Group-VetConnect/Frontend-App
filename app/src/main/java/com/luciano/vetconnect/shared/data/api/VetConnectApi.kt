@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface ApiService {
-    @GET("v1/da0e7130-7d4a-41af-9cf4-80650db94308")
+    @GET("v1/34bccc77-5d0a-4787-bbbf-b6e107d439ab")
     suspend fun getVeterinaryCards(): VeterinaryResponse
 
     @GET("")

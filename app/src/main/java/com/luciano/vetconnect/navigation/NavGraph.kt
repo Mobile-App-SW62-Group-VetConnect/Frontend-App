@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.luciano.vetconnect.R
+import com.luciano.vetconnect.features.auth.forgotpassword.ForgotPasswordScreen
 import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
 import com.luciano.vetconnect.features.auth.splash.SplashScreen
@@ -27,6 +28,7 @@ import com.luciano.vetconnect.features.search.SearchScreen
 import com.luciano.vetconnect.features.search.SearchResults
 
 import com.luciano.vetconnect.features.home.HomeScreen
+import com.luciano.vetconnect.features.settings.SettingsScreen
 
 
 sealed class Screen(val route: String) {
@@ -35,12 +37,11 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Home: Screen("home")
     object VetDetail : Screen("vet_detail")
-
     object Search : Screen("search")
     object SearchResults : Screen("searchResultScreen")
-
-
     object SavedVetScreen : Screen("favorites")
+    object Settings : Screen("settings")
+    object ForgotPassword : Screen("forgot_password")
 
 }
 
@@ -134,9 +135,17 @@ fun NavGraph(
         }
 
         composable(Screen.SearchResults.route) {
-            SearchResults(navController = navController)
+            SearchResults(
+                navController = navController,
+                onMenuClick = onMenuClick
+            )
         }
-
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = navController, onMenuClick = onMenuClick)
+        }
+        composable(Screen.ForgotPassword.route) {
+            ForgotPasswordScreen(navController = navController)
+        }
 
 
     }
