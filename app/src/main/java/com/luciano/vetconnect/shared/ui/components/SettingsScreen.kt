@@ -1,4 +1,4 @@
-package com.luciano.vetconnect.features.settings
+package com.luciano.vetconnect.shared.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,8 +28,8 @@ fun SettingsScreen(
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Cerrar sesión") },
-            text = { Text("¿Estás seguro de que deseas cerrar sesión?") },
+            title = { Text("Cerrar sesión", color = TextColors.Primary) },
+            text = { Text("¿Estás seguro de que deseas cerrar sesión?", color = TextColors.Primary) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -40,7 +39,8 @@ fun SettingsScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = PrimaryGreen
+                        containerColor = BrandColors.Primary,
+                        contentColor = TextColors.OnDark
                     )
                 ) {
                     Text("Sí, cerrar sesión")
@@ -48,15 +48,16 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text("Cancelar")
+                    Text("Cancelar", color = TextColors.Tertiary)
                 }
-            }
+            },
+            containerColor = BackgroundColors.Surface
         )
     }
 
     Scaffold(
         topBar = { TopAppBar(onMenuClick = onMenuClick) },
-        containerColor = SecondaryOrange2
+        containerColor = BackgroundColors.Primary
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -67,7 +68,7 @@ fun SettingsScreen(
             Text(
                 text = "Ajustes",
                 style = MaterialTheme.typography.headlineMedium,
-                color = TextDarkGreen,
+                color = TextColors.Primary,
                 modifier = Modifier.padding(16.dp)
             )
 
@@ -75,17 +76,17 @@ fun SettingsScreen(
                 SettingsItem(
                     icon = Icons.Outlined.Person,
                     title = "Editar perfil",
-                    onClick = { /* TODO: Navigate to edit profile */ }
+                    onClick = { navController.navigate(Screen.EditProfile.route) }
                 )
                 SettingsItem(
                     icon = Icons.Outlined.Lock,
                     title = "Cambiar contraseña",
-                    onClick = { /* TODO: Navigate to change password */ }
+                    onClick = { navController.navigate(Screen.ChangePassword.route) }
                 )
                 SettingsItem(
                     icon = Icons.Outlined.Notifications,
                     title = "Notificaciones",
-                    onClick = { /* TODO: Navigate to notifications settings */ }
+                    onClick = { navController.navigate(Screen.NotificationSettings.route) }
                 )
             }
 
@@ -126,7 +127,7 @@ fun SettingsScreen(
                 SettingsItem(
                     icon = Icons.Outlined.Logout,
                     title = "Cerrar sesión",
-                    titleColor = Color.Red,
+                    titleColor = SemanticColors.Error,
                     onClick = { showLogoutDialog = true }
                 )
             }
@@ -144,12 +145,12 @@ private fun SettingsSection(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = TextOptionGray,
+                color = TextColors.Secondary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
         content()
-        Divider(color = Gray1, thickness = 1.dp)
+        Divider(color = NeutralColors.Gray1, thickness = 1.dp)
     }
 }
 
@@ -158,7 +159,7 @@ private fun SettingsItem(
     icon: ImageVector,
     title: String,
     subtitle: String? = null,
-    titleColor: Color = TextDarkGreen,
+    titleColor: androidx.compose.ui.graphics.Color = TextColors.Primary,
     onClick: () -> Unit
 ) {
     Row(
@@ -171,7 +172,7 @@ private fun SettingsItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = PrimaryGreen,
+            tint = BrandColors.Primary,
             modifier = Modifier.size(24.dp)
         )
         Column(
@@ -187,7 +188,7 @@ private fun SettingsItem(
             if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    color = TextOptionGray,
+                    color = TextColors.Secondary,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -195,7 +196,7 @@ private fun SettingsItem(
         Icon(
             imageVector = Icons.Default.KeyboardArrowRight,
             contentDescription = null,
-            tint = TextOptionGray
+            tint = NeutralColors.Gray2
         )
     }
 }

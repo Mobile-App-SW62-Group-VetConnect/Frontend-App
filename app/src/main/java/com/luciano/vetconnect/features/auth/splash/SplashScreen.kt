@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.luciano.vetconnect.R
 import com.luciano.vetconnect.navigation.Screen
-import com.luciano.vetconnect.shared.ui.theme.SecondaryGreen2
+import com.luciano.vetconnect.shared.ui.theme.BackgroundColors
 import kotlinx.coroutines.delay
 
 @Composable
@@ -27,7 +27,7 @@ fun SplashScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SecondaryGreen2)
+            .background(BackgroundColors.Secondary)
     ) {
         Column(
             modifier = Modifier

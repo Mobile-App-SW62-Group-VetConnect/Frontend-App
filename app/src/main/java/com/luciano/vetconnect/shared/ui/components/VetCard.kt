@@ -1,7 +1,6 @@
 package com.luciano.vetconnect.shared.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,45 +29,35 @@ fun VetCard(
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onVetClick),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = BackgroundColors.Surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = veterinary.name,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextDarkGreen
+                color = TextColors.Primary
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(vertical = 8.dp)
             ) {
-                val maxStars = 5
-                (0 until maxStars).forEach { index ->
-                    val isFilled = index < veterinary.rating
-                    val iconId = if (isFilled) {
-                        R.drawable.ic_star_filled
-                    } else {
-                        R.drawable.ic_star_outline
-                    }
-
+                repeat(5) { index ->
                     Icon(
-                        painter = painterResource(id = iconId),
-                        contentDescription = if (isFilled) "Estrella llena" else "Estrella vacía",
-                        tint = SecondaryOrange,
+                        painter = painterResource(
+                            id = if (index < veterinary.rating) R.drawable.ic_star_filled
+                            else R.drawable.ic_star_outline
+                        ),
+                        contentDescription = "Star",
+                        tint = BrandColors.Secondary,
                         modifier = Modifier.size(16.dp)
                     )
-
-                    if (index < maxStars - 1) {
-                        Spacer(modifier = Modifier.width(2.dp))
-                    }
                 }
-
                 Text(
                     text = "${veterinary.rating}/5",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = TextColors.Secondary,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -87,7 +75,7 @@ fun VetCard(
             Text(
                 text = "Dirección: ${veterinary.address}",
                 fontSize = 14.sp,
-                color = Color.Gray,
+                color = TextColors.Secondary,
                 modifier = Modifier.padding(top = 8.dp)
             )
 
@@ -103,13 +91,13 @@ fun VetCard(
                     Text(
                         text = "Consulta clínica",
                         fontSize = 14.sp,
-                        color = TextDarkGreen
+                        color = TextColors.Primary
                     )
                     Text(
                         text = veterinary.clinicPrice,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextDarkGreen
+                        color = TextColors.Primary
                     )
                 }
 
@@ -122,13 +110,13 @@ fun VetCard(
                     Text(
                         text = "Baño",
                         fontSize = 14.sp,
-                        color = TextDarkGreen
+                        color = TextColors.Primary
                     )
                     Text(
                         text = veterinary.bathPrice,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextDarkGreen
+                        color = TextColors.Primary
                     )
                 }
             }

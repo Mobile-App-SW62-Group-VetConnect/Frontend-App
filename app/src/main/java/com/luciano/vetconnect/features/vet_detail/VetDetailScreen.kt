@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -30,13 +29,13 @@ import com.luciano.vetconnect.navigation.TopAppBar
 @Composable
 fun VetDetailScreen(navController: NavController, onMenuClick: () -> Unit) {
     Scaffold(
-        topBar = { TopAppBar(onMenuClick = onMenuClick) }
+        topBar = { TopAppBar(onMenuClick = onMenuClick) },
+        containerColor = BackgroundColors.Primary
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(SecondaryOrange2)
         ) {
             item {
                 VetImage()
@@ -45,7 +44,6 @@ fun VetDetailScreen(navController: NavController, onMenuClick: () -> Unit) {
                 ServicesSection()
                 AddressSection()
                 ReviewsSection()
-
             }
         }
     }
@@ -74,7 +72,7 @@ fun VetImage() {
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(if (index == 0) PrimaryGreen else Color.White)
+                        .background(if (index == 0) BrandColors.Primary else TextColors.OnDark)
                         .padding(end = 4.dp)
                 )
             }
@@ -93,26 +91,26 @@ fun VetInfo() {
             text = "Clinica Veterinaria - El Roble",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
-            color = PrimaryGreen
+            color = TextColors.Primary
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             repeat(4) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star_filled),
                     contentDescription = "Star",
-                    tint = SecondaryOrange,
+                    tint = BrandColors.Secondary,
                     modifier = Modifier.size(16.dp)
                 )
             }
             Icon(
                 painter = painterResource(id = R.drawable.ic_star_outline),
                 contentDescription = "Star",
-                tint = SecondaryOrange,
+                tint = BrandColors.Secondary,
                 modifier = Modifier.size(16.dp)
             )
             Text(
                 text = "233 Reviews",
-                color = Color.Gray,
+                color = TextColors.Secondary,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -142,32 +140,34 @@ fun ActionButton(icon: Any, text: String) {
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
-                .background(PrimaryGreen)
+                .background(BrandColors.Primary)
         ) {
             when (icon) {
                 is ImageVector ->
-                    Icon(imageVector = icon, contentDescription = text, tint = Color.White)
+                    Icon(imageVector = icon, contentDescription = text, tint = TextColors.OnDark)
                 is Painter ->
-                    Icon(painter = icon, contentDescription = text, tint = Color.White)
+                    Icon(painter = icon, contentDescription = text, tint = TextColors.OnDark)
             }
         }
-        Text(text = text, fontSize = 12.sp, color = PrimaryGreen)
+        Text(text = text, fontSize = 12.sp, color = TextColors.Primary)
     }
 }
+
 @Composable
 fun ServicesSection() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = BackgroundColors.Surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Servicios",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = PrimaryGreen
+                color = TextColors.Primary
             )
             Spacer(modifier = Modifier.height(8.dp))
             ServiceItem("Consulta clínica", "Price S/. 60")
@@ -184,8 +184,8 @@ fun ServiceItem(name: String, price: String) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = name, color = Color.Black)
-        Text(text = price, color = Color.Gray)
+        Text(text = name, color = TextColors.Primary)
+        Text(text = price, color = TextColors.Secondary)
     }
 }
 
@@ -195,17 +195,21 @@ fun AddressSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = BackgroundColors.Surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Dirección",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = PrimaryGreen
+                color = TextColors.Primary
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Jr Callao Nro 894, Callao", color = Color.Black)
+            Text(
+                text = "Jr Callao Nro 894, Callao",
+                color = TextColors.Primary
+            )
         }
     }
 }
@@ -216,14 +220,15 @@ fun ReviewsSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = BackgroundColors.Surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Reseñas",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = PrimaryGreen
+                color = TextColors.Primary
             )
             Spacer(modifier = Modifier.height(8.dp))
             ReviewItem()
@@ -231,14 +236,18 @@ fun ReviewsSection() {
             OutlinedTextField(
                 value = "",
                 onValueChange = { /* TODO: Implement review input */ },
-                placeholder = { Text("Escribe una reseña...") },
+                placeholder = { Text("Escribe una reseña...", color = TextColors.Secondary) },
                 modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = BrandColors.Primary,
+                    unfocusedBorderColor = NeutralColors.Gray2
+                ),
                 trailingIcon = {
                     IconButton(onClick = { /* TODO: Submit review */ }) {
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = "Submit Review",
-                            tint = PrimaryGreen
+                            tint = BrandColors.Primary
                         )
                     }
                 }
@@ -263,25 +272,37 @@ fun ReviewItem() {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(text = "Nombre de usuario", fontWeight = FontWeight.Bold)
-            Text(text = "Hace x días", color = Color.Gray, fontSize = 12.sp)
+            Text(
+                text = "Nombre de usuario",
+                fontWeight = FontWeight.Bold,
+                color = TextColors.Primary
+            )
+            Text(
+                text = "Hace x días",
+                color = TextColors.Secondary,
+                fontSize = 12.sp
+            )
             Row {
                 repeat(4) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_star_filled),
                         contentDescription = "Star",
-                        tint = SecondaryOrange,
+                        tint = BrandColors.Secondary,
                         modifier = Modifier.size(16.dp)
                     )
                 }
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star_outline),
                     contentDescription = "Star",
-                    tint = SecondaryOrange,
+                    tint = BrandColors.Secondary,
                     modifier = Modifier.size(16.dp)
                 )
             }
-            Text(text = "Texto de la reseña", fontSize = 14.sp)
+            Text(
+                text = "Texto de la reseña",
+                fontSize = 14.sp,
+                color = TextColors.Primary
+            )
         }
     }
 }

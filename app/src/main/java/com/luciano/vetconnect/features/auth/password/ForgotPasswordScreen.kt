@@ -1,4 +1,5 @@
-package com.luciano.vetconnect.features.auth.forgotpassword
+// ForgotPasswordScreen.kt
+package com.luciano.vetconnect.features.auth.password
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +19,7 @@ fun ForgotPasswordScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SecondaryOrange2
+        color = BackgroundColors.Primary
     ) {
         Column(
             modifier = Modifier
@@ -30,14 +31,14 @@ fun ForgotPasswordScreen(navController: NavController) {
             Text(
                 text = "Recuperar contraseña",
                 style = MaterialTheme.typography.headlineMedium,
-                color = TextDarkGreen,
+                color = TextColors.Primary,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
             if (!isEmailSent) {
                 Text(
                     text = "Ingresa tu correo electrónico y te enviaremos las instrucciones para recuperar tu contraseña",
-                    color = TextDarkGreen,
+                    color = TextColors.Primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
@@ -49,8 +50,8 @@ fun ForgotPasswordScreen(navController: NavController) {
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = PrimaryGreen,
-                        unfocusedBorderColor = TextOptionGray
+                        focusedBorderColor = BrandColors.Primary,
+                        unfocusedBorderColor = NeutralColors.Gray2
                     )
                 )
 
@@ -59,7 +60,10 @@ fun ForgotPasswordScreen(navController: NavController) {
                 Button(
                     onClick = { isEmailSent = true },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BrandColors.Primary,
+                        contentColor = TextColors.OnDark
+                    ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("Enviar instrucciones")
@@ -68,13 +72,13 @@ fun ForgotPasswordScreen(navController: NavController) {
                 Text(
                     text = "¡Correo enviado!",
                     style = MaterialTheme.typography.titleLarge,
-                    color = PrimaryGreen,
+                    color = BrandColors.Primary,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
                 Text(
                     text = "Hemos enviado las instrucciones de recuperación de contraseña a tu correo electrónico. Por favor, revisa tu bandeja de entrada.",
-                    color = TextDarkGreen,
+                    color = TextColors.Primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
@@ -82,7 +86,10 @@ fun ForgotPasswordScreen(navController: NavController) {
                 Button(
                     onClick = { navController.navigate("login") },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BrandColors.Primary,
+                        contentColor = TextColors.OnDark
+                    ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("Volver al inicio de sesión")
@@ -96,7 +103,7 @@ fun ForgotPasswordScreen(navController: NavController) {
             ) {
                 Text(
                     text = "Volver",
-                    color = SecondaryGreen2
+                    color = TextColors.Tertiary
                 )
             }
         }

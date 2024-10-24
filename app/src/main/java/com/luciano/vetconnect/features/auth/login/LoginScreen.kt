@@ -27,7 +27,7 @@ fun LoginScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SecondaryOrange2 // Fondo beige
+        color = BackgroundColors.Primary
     ) {
         Column(
             modifier = Modifier
@@ -35,30 +35,27 @@ fun LoginScreen(navController: NavController) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-
-        )
-
-        {
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.vet_connect_logo),
                 contentDescription = "Vet Connect Logo",
-                modifier = Modifier.size(300.dp) // Aumentado el tamaño del logo
+                modifier = Modifier.size(300.dp)
             )
 
-            Spacer(modifier = Modifier.height(48.dp)) // Aumentado el espacio después del logo
+            Spacer(modifier = Modifier.height(48.dp))
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electrónico", color = Black) },
+                label = { Text("Correo electrónico", color = TextColors.Primary) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = PrimaryGreen,
-                    unfocusedBorderColor = TextOptionGray
+                    focusedBorderColor = BrandColors.Primary,
+                    unfocusedBorderColor = NeutralColors.Gray2
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                textStyle = TextStyle(color = TextOptionGray)
+                textStyle = TextStyle(color = TextColors.Primary)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -66,21 +63,21 @@ fun LoginScreen(navController: NavController) {
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña",color = Black) },
+                label = { Text("Contraseña", color = TextColors.Primary) },
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = PrimaryGreen,
-                    unfocusedBorderColor = TextOptionGray
+                    focusedBorderColor = BrandColors.Primary,
+                    unfocusedBorderColor = NeutralColors.Gray2
                 ),
-                textStyle = TextStyle(color = TextOptionGray),
+                textStyle = TextStyle(color = TextColors.Primary),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             painter = painterResource(id = if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility),
                             contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                            tint = PrimaryGreen
+                            tint = BrandColors.Primary
                         )
                     }
                 },
@@ -91,24 +88,25 @@ fun LoginScreen(navController: NavController) {
 
             Button(
                 onClick = { navController.navigate(Screen.Home.route) },
-
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryGreen2),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = BrandColors.Primary,
+                    contentColor = TextColors.OnDark
+                ),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("INICIAR SESIÓN", color = PrimaryWhite)
+                Text("INICIAR SESIÓN")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(onClick = {  navController.navigate(Screen.ForgotPassword.route) }) {
-                Text("¿Olvidaste tu contraseña?", color = SecondaryGreen2)
+            TextButton(onClick = { navController.navigate(Screen.ForgotPassword.route) }) {
+                Text("¿Olvidaste tu contraseña?", color = TextColors.Tertiary)
             }
 
             TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
-                Text("Crear una cuenta", color = SecondaryGreen2)
+                Text("Crear una cuenta", color = TextColors.Tertiary)
             }
-            }
-
         }
     }
+}
