@@ -22,8 +22,8 @@ import com.luciano.vetconnect.features.auth.login.LoginScreen
 import com.luciano.vetconnect.features.auth.password.ChangePasswordScreen
 import com.luciano.vetconnect.features.auth.register.RegisterScreen
 import com.luciano.vetconnect.features.auth.splash.SplashScreen
-import com.luciano.vetconnect.features.savedvet.SavedVetScreen
-import com.luciano.vetconnect.features.vet_detail.VetDetailScreen
+import com.luciano.vetconnect.features.veterinary.saved.SavedVetScreen
+import com.luciano.vetconnect.features.veterinary.detail.VetDetailScreen
 import com.luciano.vetconnect.shared.ui.components.MenuOverlay
 import com.luciano.vetconnect.shared.ui.theme.*
 import com.luciano.vetconnect.features.search.SearchScreen

@@ -1,4 +1,4 @@
-package com.luciano.vetconnect.features.vet_detail
+package com.luciano.vetconnect.features.veterinary.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

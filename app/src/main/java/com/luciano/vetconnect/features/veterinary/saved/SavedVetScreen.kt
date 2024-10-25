@@ -1,4 +1,4 @@
-package com.luciano.vetconnect.features.savedvet
+package com.luciano.vetconnect.features.veterinary.saved
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
